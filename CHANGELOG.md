@@ -1,5 +1,5 @@
 ## latest
-
+  * Fixed local_planer: agent will now stop when it reaches the desired destination 
   * Traffic Manager:
     - Added benchmark
     - Added synchronous mode
