@@ -36,10 +36,7 @@ pipeline
                             {
                                 sh 'make LibCarla'
                                 sh 'make PythonAPI'
-                                lock('ubuntu_build')
-                                {
-                                    sh 'make CarlaUE4Editor'
-                                }
+                                sh 'make CarlaUE4Editor'
                                 sh 'make examples'
                             }
                             post
@@ -80,11 +77,8 @@ pipeline
                             agent { label 'ubuntu && build' }
                             steps
                             {
-                                lock('ubuntu_package')
-                                {
-                                    sh 'make package'
-                                    sh 'make package ARGS="--packages=AdditionalMaps --clean-intermediate"'
-                                }
+                                sh 'make package'
+                                sh 'make package ARGS="--packages=AdditionalMaps --clean-intermediate"'
                                 sh 'make examples ARGS="localhost 3654"'
                             }
                             post {
@@ -104,12 +98,9 @@ pipeline
                                 unstash name: 'ubuntu_package'
                                 unstash name: 'ubuntu_examples'
                                 sh 'tar -xvzf Dist/CARLA*.tar.gz -C Dist/'
-                                lock('ubuntu_gpu')
-                                {
-                                    sh 'DISPLAY= ./Dist/CarlaUE4.sh -opengl --carla-rpc-port=3654 --carla-streaming-port=0 -nosound > CarlaUE4.log &'
-                                    sh 'make smoke_tests ARGS="--xml"'
-                                    sh 'make run-examples ARGS="localhost 3654"'
-                                }
+                                sh 'DISPLAY= ./Dist/CarlaUE4.sh -opengl --carla-rpc-port=3654 --carla-streaming-port=0 -nosound > CarlaUE4.log &'
+                                sh 'make smoke_tests ARGS="--xml"'
+                                sh 'make run-examples ARGS="localhost 3654"'
                             }
                             post
                             {
@@ -176,16 +167,7 @@ pipeline
                 //                     call ../setEnv64.bat
                 //                     make LibCarla
                 //                     make PythonAPI
-                //                 """
-                //                 lock('windows_build')
-                //                 {
-                //                     bat """
-                //                         call ../setEnv64.bat
-                //                         make CarlaUE4Editor
-                //                     """
-                //                 }
-                //                 // bat """
-                //                 //     call ../setEnv64.bat
+                //                     make CarlaUE4Editor
                 //                 //     make examples
                 //                 // """
                 //             }
